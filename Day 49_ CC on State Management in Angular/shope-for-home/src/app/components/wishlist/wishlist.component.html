@@ -1,0 +1,33 @@
+<div class="container mt-4">
+  <h2 class="mb-4">My Wishlist</h2>
+  
+  <div *ngIf="wishlistItems.length === 0" class="alert alert-info">
+    Your wishlist is empty. <a routerLink="/products">Browse products</a>
+  </div>
+
+  <div *ngIf="wishlistItems.length > 0" class="row">
+    <div *ngFor="let item of wishlistItems" class="col-md-4 mb-4">
+      <div class="card h-100">
+        <img [src]="getImageUrl(item.productImage)" class="card-img-top" [alt]="item.productName" style="height: 200px; object-fit: cover;">
+        <div class="card-body">
+          <h5 class="card-title">{{item.productName}}</h5>
+          <p class="card-text text-muted">{{item.categoryName}}</p>
+          <p class="card-text fw-bold text-purple">₹{{item.price}}</p>
+          <p class="card-text">
+            <span class="badge" [ngClass]="item.isInStock ? 'bg-success' : 'bg-danger'">
+              {{item.isInStock ? 'In Stock' : 'Out of Stock'}}
+            </span>
+          </p>
+        </div>
+        <div class="card-footer bg-transparent">
+          <button class="btn btn-purple btn-sm me-2" (click)="moveToCart(item.productId)" [disabled]="!item.isInStock">
+            <i class="fas fa-shopping-cart me-1"></i> Move to Cart
+          </button>
+          <button class="btn btn-outline-danger btn-sm" (click)="removeFromWishlist(item.productId)">
+            <i class="fas fa-trash me-1"></i> Remove
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

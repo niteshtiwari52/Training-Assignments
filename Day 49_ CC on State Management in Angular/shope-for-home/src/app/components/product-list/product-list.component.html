@@ -1,0 +1,94 @@
+<div class="container mt-4">
+  <div class="row">
+    <!-- Filters -->
+    <div class="col-md-3">
+      <div class="card mb-4">
+        <div class="card-header bg-purple text-white">
+          <h5 class="mb-0">Filters</h5>
+        </div>
+        <div class="card-body">
+          <div class="mb-3">
+            <label class="form-label">Category</label>
+            <select class="form-select" [(ngModel)]="selectedCategory" (change)="applyFilters()">
+              <option [value]="null">All Categories</option>
+              <option *ngFor="let category of categories" [value]="category.categoryId">
+                {{category.name}}
+              </option>
+            </select>
+          </div>
+          
+          <!-- <div class="mb-3">
+            <label class="form-label">Min Price</label>
+            <input type="number" class="form-control" [(ngModel)]="minPrice" (change)="applyFilters()">
+          </div>
+          
+          <div class="mb-3">
+            <label class="form-label">Max Price</label>
+            <input type="number" class="form-control" [(ngModel)]="maxPrice" (change)="applyFilters()">
+          </div> -->
+          
+          <button class="btn btn-outline-purple w-100" (click)="clearFilters()">Clear Filters</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Products -->
+    <div class="col-md-9">
+      <div class="row">
+        <div class="col-12">
+          <h2 class="mb-4">Products</h2>
+        </div>
+      </div>
+
+      <div *ngIf="isLoading" class="text-center">
+        <div class="spinner-border text-purple" role="status">
+          <span class="visually-hidden">Loading...</span>
+        </div>
+        <p class="mt-2">Loading products...</p>
+      </div>
+
+      <div class="row" *ngIf="!isLoading">
+        <div *ngFor="let product of filteredProducts" class="col-md-4 mb-4">
+          <div class="card h-100 product-card">
+            <img [src]="getImageUrl(product.imagePath)" class="card-img-top" [alt]="product.name" style="height: 200px; object-fit: cover;">
+            <div class="card-body">
+              <h5 class="card-title">{{product.name}}</h5>
+              <p class="card-text text-muted">{{product.description | slice:0:100}}...</p>
+              <p class="card-text fw-bold text-purple">₹{{product.price}}</p>
+              <p class="card-text">
+                <small class="text-muted">Category: {{product.categoryName}}</small>
+              </p>
+              <p class="card-text">
+                <small class="text-muted">Stock: {{product.stockQuantity}} available</small>
+              </p>
+            </div>
+            <div class="card-footer bg-transparent">
+              <a [routerLink]="['/products', product.productId]" class="btn btn-purple btn-sm me-2">View Details</a>
+              <button *ngIf="isAuthenticated" class="btn btn-outline-purple btn-sm me-2" (click)="addToCart(product.productId)" [disabled]="product.stockQuantity === 0">
+                <i class="fas fa-shopping-cart"></i>
+              </button>
+              <button *ngIf="isAuthenticated" class="btn btn-outline-purple btn-sm" (click)="addToWishlist(product.productId)">
+                <i class="fas fa-heart"></i>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Pagination -->
+      <nav *ngIf="totalPages > 1 && !isLoading" class="mt-4">
+        <ul class="pagination justify-content-center">
+          <li class="page-item" [class.disabled]="page === 1">
+            <a class="page-link" (click)="changePage(page - 1)" href="javascript:void(0)">Previous</a>
+          </li>
+          <li *ngFor="let p of [].constructor(totalPages); let i = index" class="page-item" [class.active]="page === i + 1">
+            <a class="page-link" (click)="changePage(i + 1)" href="javascript:void(0)">{{i + 1}}</a>
+          </li>
+          <li class="page-item" [class.disabled]="page === totalPages">
+            <a class="page-link" (click)="changePage(page + 1)" href="javascript:void(0)">Next</a>
+          </li>
+        </ul>
+      </nav>
+    </div>
+  </div>
+</div>

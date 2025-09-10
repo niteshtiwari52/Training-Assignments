@@ -1,0 +1,96 @@
+/* You can add global styles to this file, and also import other style files */
+/* Global Styles */
+@import url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css');
+
+:root {
+  --purple: #6f42c1;
+  --purple-light: #8c68cd;
+  --purple-dark: #563d7c;
+}
+
+body {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background-color: #f8f9fa;
+}
+
+.bg-purple {
+  background-color: var(--purple) !important;
+}
+
+.btn-purple {
+  background-color: var(--purple);
+  border-color: var(--purple);
+  color: white;
+}
+
+.btn-purple:hover {
+  background-color: var(--purple-dark);
+  border-color: var(--purple-dark);
+  color: white;
+}
+
+.btn-outline-purple {
+  color: var(--purple);
+  border-color: var(--purple);
+}
+
+.btn-outline-purple:hover {
+  background-color: var(--purple);
+  color: white;
+}
+
+.text-purple {
+  color: var(--purple) !important;
+}
+
+.border-purple {
+  border-color: var(--purple) !important;
+}
+
+.main-content {
+  min-height: calc(100vh - 76px);
+}
+
+.spinner-border.text-purple {
+  color: var(--purple) !important;
+}
+
+.card {
+  box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
+  border: 1px solid rgba(0, 0, 0, 0.125);
+}
+
+.card-header.bg-purple {
+  border-bottom: none;
+}
+
+.form-control:focus,
+.form-select:focus {
+  border-color: var(--purple-light);
+  box-shadow: 0 0 0 0.25rem rgba(111, 66, 193, 0.25);
+}
+
+.alert-info {
+  background-color: #e0d6f5;
+  border-color: #c9b9f0;
+  color: var(--purple-dark);
+}
+
+/* Custom pagination styles */
+.pagination .page-item.active .page-link {
+  background-color: var(--purple);
+  border-color: var(--purple);
+}
+
+.pagination .page-link {
+  color: var(--purple);
+}
+
+.pagination .page-link:hover {
+  color: var(--purple-dark);
+}
+
+/* Badge styles */
+.badge.bg-purple {
+  background-color: var(--purple) !important;
+}

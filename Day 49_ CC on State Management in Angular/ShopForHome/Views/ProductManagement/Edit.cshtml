@@ -1,0 +1,224 @@
+﻿<!-- Views/ProductManagement/Edit.cshtml -->
+@model ShopForHome.ViewModels.UpdateProductViewModel
+@{
+    ViewData["Title"] = "Edit Product";
+    Layout = "_Layout";
+}
+
+<div class="container-fluid">
+    <!-- Page Header -->
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h1 class="page-title">
+                <i class="fas fa-edit me-3"></i>Edit Product
+            </h1>
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="@Url.Action("Index", "Dashboard")">Dashboard</a></li>
+                    <li class="breadcrumb-item"><a href="@Url.Action("Index", "ProductManagement")">Product Management</a></li>
+                    <li class="breadcrumb-item active">Edit Product</li>
+                </ol>
+            </nav>
+        </div>
+        <div>
+            <a href="@Url.Action("Details", new { id = Model.ProductId })" class="btn btn-outline-info me-2">
+                <i class="fas fa-eye me-2"></i>View Details
+            </a>
+            <a href="@Url.Action("Index")" class="btn btn-outline-secondary">
+                <i class="fas fa-arrow-left me-2"></i>Back to Products
+            </a>
+        </div>
+    </div>
+
+    <form asp-action="Edit" method="post" enctype="multipart/form-data" novalidate>
+        <input asp-for="ProductId" type="hidden" />
+        <input asp-for="CurrentImagePath" type="hidden" />
+        
+        <div class="row g-4">
+            <!-- Left Column - Basic Information -->
+            <div class="col-lg-8">
+                <div class="card">
+                    <div class="card-header bg-primary text-white">
+                        <h5 class="card-title mb-0">
+                            <i class="fas fa-info-circle me-2"></i>Product Information
+                        </h5>
+                    </div>
+                    <div class="card-body">
+                        <div asp-validation-summary="ModelOnly" class="alert alert-danger" role="alert">
+                            <i class="fas fa-exclamation-triangle me-2"></i>Please correct the errors below.
+                        </div>
+
+                        <div class="row g-3">
+                            <div class="col-12">
+                                <div class="form-group">
+                                    <label asp-for="Name" class="form-label required">
+                                        <i class="fas fa-tag me-2"></i>Product Name
+                                    </label>
+                                    <input asp-for="Name" class="form-control" placeholder="Enter product name" />
+                                    <span asp-validation-for="Name" class="text-danger small"></span>
+                                </div>
+                            </div>
+                            
+                            <div class="col-12">
+                                <div class="form-group">
+                                    <label asp-for="Description" class="form-label">
+                                        <i class="fas fa-align-left me-2"></i>Description
+                                    </label>
+                                    <textarea asp-for="Description" class="form-control" rows="4" 
+                                              placeholder="Enter detailed product description"></textarea>
+                                    <span asp-validation-for="Description" class="text-danger small"></span>
+                                </div>
+                            </div>
+
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label asp-for="CategoryId" class="form-label required">
+                                        <i class="fas fa-folder me-2"></i>Category
+                                    </label>
+                                    <select asp-for="CategoryId" class="form-select">
+                                        <option value="">Select Category</option>
+                                        @foreach (var category in ViewBag.Categories)
+                                        {
+                                            <option value="@category.CategoryId" @@(category.CategoryId == Model.CategoryId ? "selected" : "")>
+                                                @category.Name
+                                            </option>
+                                        }
+                                    </select>
+                                    <span asp-validation-for="CategoryId" class="text-danger small"></span>
+                                </div>
+                            </div>
+                            
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label asp-for="Price" class="form-label required">
+                                        <i class="fas fa-rupee-sign me-2"></i>Price (₹)
+                                    </label>
+                                    <input asp-for="Price" class="form-control" placeholder="0.00" step="0.01" />
+                                    <span asp-validation-for="Price" class="text-danger small"></span>
+                                </div>
+                            </div>
+
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label asp-for="StockQuantity" class="form-label required">
+                                        <i class="fas fa-boxes me-2"></i>Stock Quantity
+                                    </label>
+                                    <input asp-for="StockQuantity" class="form-control" placeholder="0" />
+                                    <span asp-validation-for="StockQuantity" class="text-danger small"></span>
+                                </div>
+                            </div>
+                            
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label asp-for="GST" class="form-label required">
+                                        <i class="fas fa-percent me-2"></i>GST Rate (%)
+                                    </label>
+                                    <input asp-for="GST" class="form-control" placeholder="18.00" step="0.01" />
+                                    <span asp-validation-for="GST" class="text-danger small"></span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Right Column - Image Upload -->
+            <div class="col-lg-4">
+                <div class="card">
+                    <div class="card-header bg-success text-white">
+                        <h5 class="card-title mb-0">
+                            <i class="fas fa-image me-2"></i>Product Image
+                        </h5>
+                    </div>
+                    <div class="card-body">
+                        <!-- Current Image -->
+                        @if (!string.IsNullOrEmpty(Model.CurrentImagePath))
+                        {
+                            <div class="mb-3">
+                                <label class="form-label">Current Image</label>
+                                <div class="text-center">
+                                    <img src="@Model.CurrentImagePath" alt="Current Product Image" 
+                                         class="img-fluid rounded border" style="max-height: 150px;" id="currentImage">
+                                </div>
+                            </div>
+                        }
+
+                        <div class="form-group">
+                            <label asp-for="ImageFile" class="form-label">
+                                <i class="fas fa-upload me-2"></i>@(string.IsNullOrEmpty(Model.CurrentImagePath) ? "Upload Image" : "Replace Image")
+                            </label>
+                            <input asp-for="ImageFile" class="form-control" type="file" accept="image/*" id="imageInput" />
+                            <span asp-validation-for="ImageFile" class="text-danger small"></span>
+                            <div class="form-text">Leave empty to keep current image</div>
+                        </div>
+
+                        <!-- New Image Preview -->
+                        <div class="mt-3">
+                            <div id="imagePreview" class="text-center" style="display: none;">
+                                <label class="form-label">New Image Preview</label>
+                                <div class="border rounded p-2 bg-light">
+                                    <img id="previewImg" src="#" alt="Preview" class="img-fluid rounded" style="max-height: 150px;">
+                                </div>
+                                <button type="button" class="btn btn-sm btn-outline-danger mt-2" onclick="clearImagePreview()">
+                                    <i class="fas fa-times me-1"></i>Clear
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Action Buttons -->
+                <div class="card mt-4">
+                    <div class="card-body">
+                        <div class="d-grid gap-2">
+                            <button type="submit" class="btn btn-primary btn-lg">
+                                <i class="fas fa-save me-2"></i>Update Product
+                            </button>
+                            <a href="@Url.Action("Details", new { id = Model.ProductId })" class="btn btn-outline-info">
+                                <i class="fas fa-eye me-2"></i>View Details
+                            </a>
+                            <a href="@Url.Action("Index")" class="btn btn-outline-secondary">
+                                <i class="fas fa-times me-2"></i>Cancel
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+
+@section Scripts {
+    <script>
+        // Image preview functionality
+        document.getElementById('imageInput').addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            const preview = document.getElementById('imagePreview');
+            const previewImg = document.getElementById('previewImg');
+            
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    previewImg.src = e.target.result;
+                    preview.style.display = 'block';
+                };
+                reader.readAsDataURL(file);
+            } else {
+                preview.style.display = 'none';
+            }
+        });
+
+        function clearImagePreview() {
+            document.getElementById('imageInput').value = '';
+            document.getElementById('imagePreview').style.display = 'none';
+        }
+
+        // Add required field styling
+        document.addEventListener('DOMContentLoaded', function() {
+            const requiredLabels = document.querySelectorAll('.form-label.required');
+            requiredLabels.forEach(label => {
+                label.innerHTML += ' <span class="text-danger">*</span>';
+            });
+        });
+    </script>
+}

@@ -1,0 +1,59 @@
+<div class="container mt-4" *ngIf="product">
+  <div class="row">
+    <div class="col-md-6">
+      <img [src]="getImageUrl(product.imagePath)" [alt]="product.name" class="img-fluid rounded" style="max-height: 500px; width: 100%; object-fit: cover;">
+    </div>
+    <div class="col-md-6">
+      <h1 class="mb-3">{{product.name}}</h1>
+      <p class="text-muted">{{product.description}}</p>
+      
+      <div class="mb-3">
+        <span class="h3 text-purple">₹{{product.price}}</span>
+      </div>
+      
+      <div class="mb-3">
+        <span class="badge bg-purple">{{product.categoryName}}</span>
+        <span class="badge bg-info ms-2">GST: {{product.gst}}%</span>
+        <span class="badge bg-success ms-2" *ngIf="product.stockQuantity > 0">In Stock</span>
+        <span class="badge bg-danger ms-2" *ngIf="product.stockQuantity === 0">Out of Stock</span>
+      </div>
+      
+      <div class="mb-4">
+        <p>Stock: {{product.stockQuantity}} items available</p>
+      </div>
+      
+      <div *ngIf="isAuthenticated && product.stockQuantity > 0" class="mb-4">
+        <div class="d-flex align-items-center mb-3">
+          <label class="me-3">Quantity:</label>
+          <div class="input-group" style="width: 130px;">
+            <button class="btn btn-outline-purple" type="button" (click)="decreaseQuantity()">-</button>
+            <input type="number" class="form-control text-center" [(ngModel)]="quantity" min="1" [max]="product.stockQuantity">
+            <button class="btn btn-outline-purple" type="button" (click)="increaseQuantity()">+</button>
+          </div>
+        </div>
+        
+        <div class="d-grid gap-2 d-md-flex">
+          <button class="btn btn-purple me-md-2" (click)="addToCart()">
+            <i class="fas fa-shopping-cart me-2"></i>Add to Cart
+          </button>
+          <button class="btn btn-outline-purple" (click)="addToWishlist()">
+            <i class="fas fa-heart me-2"></i>Add to Wishlist
+          </button>
+        </div>
+      </div>
+      
+      <div *ngIf="!isAuthenticated" class="alert alert-info">
+        Please <a routerLink="/login">login</a> to add products to your cart or wishlist.
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="container mt-4" *ngIf="!product && isLoading">
+  <div class="text-center">
+    <div class="spinner-border text-purple" role="status">
+      <span class="visually-hidden">Loading...</span>
+    </div>
+    <p class="mt-2">Loading product details...</p>
+  </div>
+</div>

@@ -1,0 +1,35 @@
+.bg-purple {
+  background-color: #6f42c1;
+}
+
+.btn-purple {
+  background-color: #6f42c1;
+  color: white;
+}
+
+.btn-outline-purple {
+  border-color: #6f42c1;
+  color: #6f42c1;
+}
+
+.btn-outline-purple:hover {
+  background-color: #6f42c1;
+  color: white;
+}
+
+.text-purple {
+  color: #6f42c1;
+}
+
+.product-card {
+  transition: transform 0.2s;
+}
+
+.product-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+}
+
+.page-link {
+  cursor: pointer;
+}

@@ -1,0 +1,220 @@
+﻿<!-- Views/ProductManagement/BulkUpload.cshtml -->
+@{
+    ViewData["Title"] = "Bulk Product Upload";
+    Layout = "_Layout";
+}
+
+<div class="container-fluid">
+    <!-- Page Header -->
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h1 class="page-title">
+                <i class="fas fa-upload me-3"></i>Bulk Product Upload
+            </h1>
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="@Url.Action("Index", "Dashboard")">Dashboard</a></li>
+                    <li class="breadcrumb-item"><a href="@Url.Action("Index", "ProductManagement")">Product Management</a></li>
+                    <li class="breadcrumb-item active">Bulk Upload</li>
+                </ol>
+            </nav>
+        </div>
+        <div>
+            <a href="@Url.Action("Index")" class="btn btn-outline-secondary">
+                <i class="fas fa-arrow-left me-2"></i>Back to Products
+            </a>
+        </div>
+    </div>
+
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <!-- Instructions Card -->
+            @* <div class="card mb-4">
+                <div class="card-header bg-info text-white">
+                    <h5 class="card-title mb-0">
+                        <i class="fas fa-info-circle me-2"></i>Upload Instructions
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <div class="row g-4">
+                        <div class="col-md-6">
+                            <h6><i class="fas fa-file-csv text-primary me-2"></i>CSV Format Requirements:</h6>
+                            <ul class="mb-0">
+                                <li>File must have .csv extension</li>
+                                <li>Required columns: Name, CategoryName, Price, StockQuantity</li>
+                                <li>Optional columns: Description, GST, ImageUrl</li>
+                                <li>First row must contain column headers</li>
+                                <li>Categories must exist in the system</li>
+                            </ul>
+                        </div>
+                        <div class="col-md-6">
+                            <h6><i class="fas fa-download text-success me-2"></i>Download Template:</h6>
+                            <p class="mb-3">Get a sample CSV file with the correct format and example data.</p>
+                            <button onclick="downloadTemplate()" class="btn btn-success btn-sm">
+                                <i class="fas fa-download me-2"></i>Download Template
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="alert alert-warning mt-3 mb-0" role="alert">
+                        <i class="fas fa-exclamation-triangle me-2"></i>
+                        <strong>Important:</strong> Products with duplicate names will be skipped. Make sure your categories exist in the system before uploading.
+                    </div>
+                </div>
+            </div> *@
+
+            <!-- Upload Form -->
+            <div class="card">
+                <div class="card-header bg-primary text-white">
+                    <h5 class="card-title mb-0">
+                        <i class="fas fa-cloud-upload-alt me-2"></i>Upload CSV File
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <form asp-action="BulkUpload" method="post" enctype="multipart/form-data" id="uploadForm">
+                        <div class="mb-4">
+                            <label for="csvFile" class="form-label">
+                                <i class="fas fa-file-csv me-2"></i>Select CSV File
+                            </label>
+                            <input type="file" class="form-control" id="csvFile" name="csvFile" accept=".csv" required>
+                            <div class="form-text">Maximum file size: 5MB. Only CSV files are allowed.</div>
+                        </div>
+
+                        <!-- File Preview Area -->
+                        <div id="filePreview" class="mb-4" style="display: none;">
+                            <div class="alert alert-info">
+                                <i class="fas fa-file-csv me-2"></i>
+                                <strong>Selected File:</strong> <span id="fileName"></span>
+                                <br>
+                                <small>Size: <span id="fileSize"></span> | Last Modified: <span id="fileDate"></span></small>
+                            </div>
+                        </div>
+
+                        <!-- Upload Progress -->
+                        <div id="uploadProgress" class="mb-4" style="display: none;">
+                            <div class="d-flex justify-content-between align-items-center mb-2">
+                                <span>Uploading and Processing...</span>
+                                <span id="progressPercent">0%</span>
+                            </div>
+                            <div class="progress">
+                                <div class="progress-bar progress-bar-striped progress-bar-animated"
+                                     role="progressbar" style="width: 0%" id="progressBar"></div>
+                            </div>
+                        </div>
+
+                        <div class="d-grid">
+                            <button type="submit" class="btn btn-primary btn-lg" id="uploadBtn">
+                                <i class="fas fa-upload me-2"></i>Upload and Process CSV
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Available Categories -->
+            <div class="card mt-4">
+                <div class="card-header bg-secondary text-white">
+                    <h6 class="card-title mb-0">
+                        <i class="fas fa-tags me-2"></i>Available Categories
+                    </h6>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        @foreach (var category in ViewBag.Categories ?? new List<ShopForHome.Models.Category>())
+                        {
+                            <div class="col-md-4 mb-2">
+                                <span class="badge bg-light text-dark border">@category.Name</span>
+                            </div>
+                        }
+                    </div>
+                    <small class="text-muted">Use these exact category names in your CSV file.</small>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        // File selection handler
+        document.getElementById('csvFile').addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            const preview = document.getElementById('filePreview');
+
+            if (file) {
+                document.getElementById('fileName').textContent = file.name;
+                document.getElementById('fileSize').textContent = formatFileSize(file.size);
+                document.getElementById('fileDate').textContent = new Date(file.lastModified).toLocaleString();
+                preview.style.display = 'block';
+            } else {
+                preview.style.display = 'none';
+            }
+        });
+
+        // Form submission with progress
+        document.getElementById('uploadForm').addEventListener('submit', function(e) {
+            const fileInput = document.getElementById('csvFile');
+            const uploadBtn = document.getElementById('uploadBtn');
+            const progressDiv = document.getElementById('uploadProgress');
+
+            if (!fileInput.files[0]) {
+                e.preventDefault();
+                alert('Please select a CSV file to upload');
+                return;
+            }
+
+            // Show progress and disable button
+            uploadBtn.disabled = true;
+            uploadBtn.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i>Processing...';
+            progressDiv.style.display = 'block';
+
+            // Simulate progress (since we can't track server progress easily)
+            simulateProgress();
+        });
+
+        function simulateProgress() {
+            let progress = 0;
+            const progressBar = document.getElementById('progressBar');
+            const progressPercent = document.getElementById('progressPercent');
+
+            const interval = setInterval(() => {
+                progress += Math.random() * 15;
+                if (progress > 90) progress = 90;
+
+                progressBar.style.width = progress + '%';
+                progressPercent.textContent = Math.round(progress) + '%';
+
+                if (progress >= 90) {
+                    clearInterval(interval);
+                }
+            }, 200);
+        }
+
+        function formatFileSize(bytes) {
+            if (bytes === 0) return '0 Bytes';
+            const k = 1024;
+            const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+            const i = Math.floor(Math.log(bytes) / Math.log(k));
+            return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+        }
+
+        function downloadTemplate() {
+            const csvContent = 'Name,Description,CategoryName,Price,StockQuantity,GST,ImageUrl\n' +
+                              'Premium Sofa Set,Comfortable 3-seater premium sofa,Furniture,45000,3,18,\n' +
+                              'Modern Table Lamp,Contemporary LED table lamp with dimmer,Lighting,3500,8,18,\n' +
+                              'Abstract Wall Art,Modern abstract canvas painting,Home Décor,2500,12,18,\n' +
+                              'Dining Chair,Ergonomic wooden dining chair,Furniture,5500,20,18,\n' +
+                              'Pendant Light,Industrial style pendant light,Lighting,4200,6,18,';
+
+            const blob = new Blob([csvContent], { type: 'text/csv' });
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'product_upload_template.csv';
+            document.body.appendChild(a);
+            a.click();
+            window.URL.revokeObjectURL(url);
+            document.body.removeChild(a);
+        }
+    </script>
+}

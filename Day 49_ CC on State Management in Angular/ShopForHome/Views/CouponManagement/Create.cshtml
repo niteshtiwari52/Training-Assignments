@@ -1,0 +1,152 @@
+﻿<!-- Views/CouponManagement/Create.cshtml -->
+@model ShopForHome.ViewModels.CreateCouponViewModel
+@{
+    ViewData["Title"] = "Create Coupon";
+    Layout = "_Layout";
+}
+
+<div class="container-fluid">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h1 class="page-title">
+                <i class="fas fa-plus-circle me-3"></i>Create New Coupon
+            </h1>
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="@Url.Action("Index", "Dashboard")">Dashboard</a></li>
+                    <li class="breadcrumb-item"><a href="@Url.Action("Index", "CouponManagement")">Coupons</a></li>
+                    <li class="breadcrumb-item active">Create</li>
+                </ol>
+            </nav>
+        </div>
+        <div>
+            <a href="@Url.Action("Index")" class="btn btn-outline-secondary">
+                <i class="fas fa-arrow-left me-2"></i>Back to Coupons
+            </a>
+        </div>
+    </div>
+
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <div class="card">
+                <div class="card-header bg-primary text-white">
+                    <h5 class="card-title mb-0">
+                        <i class="fas fa-tag me-2"></i>Coupon Information
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <form asp-action="Create" method="post" novalidate>
+                        <div asp-validation-summary="ModelOnly" class="alert alert-danger" role="alert">
+                            <i class="fas fa-exclamation-triangle me-2"></i>Please correct the errors below.
+                        </div>
+
+                        <div class="row g-3">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label asp-for="Code" class="form-label required">
+                                        <i class="fas fa-tag me-2"></i>Coupon Code
+                                    </label>
+                                    <input asp-for="Code" class="form-control" placeholder="e.g., SAVE20" style="text-transform: uppercase;" />
+                                    <span asp-validation-for="Code" class="text-danger small"></span>
+                                    <div class="form-text">Use uppercase letters and numbers</div>
+                                </div>
+                            </div>
+
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label asp-for="DiscountPercent" class="form-label required">
+                                        <i class="fas fa-percent me-2"></i>Discount Percentage
+                                    </label>
+                                    <div class="input-group">
+                                        <input asp-for="DiscountPercent" class="form-control" placeholder="0" />
+                                        <span class="input-group-text">%</span>
+                                    </div>
+                                    <span asp-validation-for="DiscountPercent" class="text-danger small"></span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row g-3 mt-3">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label asp-for="ValidFrom" class="form-label required">
+                                        <i class="fas fa-calendar-alt me-2"></i>Valid From
+                                    </label>
+                                    <input asp-for="ValidFrom" class="form-control" type="datetime-local" />
+                                    <span asp-validation-for="ValidFrom" class="text-danger small"></span>
+                                </div>
+                            </div>
+
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label asp-for="ValidTo" class="form-label required">
+                                        <i class="fas fa-calendar-alt me-2"></i>Valid To
+                                    </label>
+                                    <input asp-for="ValidTo" class="form-control" type="datetime-local" />
+                                    <span asp-validation-for="ValidTo" class="text-danger small"></span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row g-3 mt-3">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label asp-for="MaxUses" class="form-label required">
+                                        <i class="fas fa-hashtag me-2"></i>Maximum Uses
+                                    </label>
+                                    <input asp-for="MaxUses" class="form-control" placeholder="1" />
+                                    <span asp-validation-for="MaxUses" class="text-danger small"></span>
+                                    <div class="form-text">How many times this coupon can be used</div>
+                                </div>
+                            </div>
+
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <div class="form-check form-switch mt-4">
+                                        <input asp-for="IsPublic" class="form-check-input" />
+                                        <label asp-for="IsPublic" class="form-check-label">
+                                            <i class="fas fa-globe me-2"></i>Public Coupon
+                                        </label>
+                                        <div class="form-text">Public coupons can be used by anyone, private coupons must be assigned to specific users</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row mt-4">
+                            <div class="col-12">
+                                <div class="d-flex justify-content-end gap-2">
+                                    <a href="@Url.Action("Index")" class="btn btn-secondary">
+                                        <i class="fas fa-times me-2"></i>Cancel
+                                    </a>
+                                    <button type="submit" class="btn btn-primary">
+                                        <i class="fas fa-save me-2"></i>Create Coupon
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const requiredLabels = document.querySelectorAll('.form-label.required');
+            requiredLabels.forEach(label => {
+                label.innerHTML += ' <span class="text-danger">*</span>';
+            });
+
+            // Auto uppercase coupon code
+            const codeInput = document.getElementById('Code');
+            if (codeInput) {
+                codeInput.addEventListener('input', function() {
+                    this.value = this.value.toUpperCase();
+                });
+            }
+        });
+    </script>
+}

@@ -1,0 +1,365 @@
+﻿<!-- Views/ProductManagement/Index.cshtml -->
+@model ShopForHome.ViewModels.PagedResult<ShopForHome.ViewModels.ProductViewModel>
+@{
+    ViewData["Title"] = "Product Management";
+    Layout = "_Layout";
+}
+
+<div class="container-fluid">
+    <!-- Page Header -->
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h1 class="page-title">
+                <i class="fas fa-box me-3"></i>Product Management
+            </h1>
+            <p class="text-muted mb-0">Manage your product catalog and inventory</p>
+        </div>
+        <div class="btn-group">
+            <a href="@Url.Action("Create")" class="btn btn-primary">
+                <i class="fas fa-plus me-2"></i>Add Product
+            </a>
+            <button type="button" class="btn btn-outline-primary dropdown-toggle dropdown-toggle-split" data-bs-toggle="dropdown">
+                <span class="visually-hidden">Toggle Dropdown</span>
+            </button>
+            <ul class="dropdown-menu">
+                
+                <li><hr class="dropdown-divider"></li>
+                @* <li><a class="dropdown-item" href="#"><i class="fas fa-tags me-2"></i>Manage Categories</a></li> *@
+                <li>
+                    <a class="dropdown-item" href="@Url.Action("BulkUpload")">
+                        <i class="fas fa-upload me-2"></i>Bulk Upload CSV
+                    </a>
+                </li>
+                <li>
+                    <a class="dropdown-item" href="#" onclick="downloadTemplate()">
+                        <i class="fas fa-download me-2"></i>Download Template
+                    </a>
+                </li>
+                
+            </ul>
+        </div>
+    </div>
+
+    <!-- Statistics Row -->
+    <div class="row g-4 mb-4">
+        <div class="col-md-3">
+            <div class="card stats-card primary">
+                <div class="card-body text-center">
+                    <i class="fas fa-box fa-2x text-primary mb-2"></i>
+                    <h4 class="mb-1">@Model.TotalCount</h4>
+                    <small class="text-muted">Total Products</small>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card stats-card success">
+                <div class="card-body text-center">
+                    <i class="fas fa-check-circle fa-2x text-success mb-2"></i>
+                    <h4 class="mb-1">@Model.Items.Count(p => p.StockQuantity > 0)</h4>
+                    <small class="text-muted">In Stock</small>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card stats-card warning">
+                <div class="card-body text-center">
+                    <i class="fas fa-exclamation-triangle fa-2x text-warning mb-2"></i>
+                    <h4 class="mb-1">@Model.Items.Count(p => p.StockQuantity <= 5 && p.StockQuantity > 0)</h4>
+                    <small class="text-muted">Low Stock</small>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card stats-card danger">
+                <div class="card-body text-center">
+                    <i class="fas fa-times-circle fa-2x text-danger mb-2"></i>
+                    <h4 class="mb-1">@Model.Items.Count(p => p.StockQuantity == 0)</h4>
+                    <small class="text-muted">Out of Stock</small>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Filters and Search -->
+    <div class="card mb-4">
+        <div class="card-body">
+            <div class="row align-items-end g-3">
+                <div class="col-md-4">
+                    <label class="form-label">Search Products</label>
+                    <div class="input-group">
+                        <span class="input-group-text"><i class="fas fa-search"></i></span>
+                        <input type="text" class="form-control" placeholder="Search by name or description..." id="searchInput">
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <label class="form-label">Category Filter</label>
+                    <select class="form-select" id="categoryFilter">
+                        <option value="">All Categories</option>
+                        @foreach (var category in ViewBag.Categories)
+                        {
+                            <option value="@category.CategoryId" @@(ViewBag.SelectedCategoryId == category.CategoryId ? "selected" : "")>
+                                @category.Name
+                            </option>
+                        }
+                    </select>
+                </div>
+                <div class="col-md-3">
+                    <label class="form-label">Stock Status</label>
+                    <select class="form-select" id="stockFilter">
+                        <option value="">All Products</option>
+                        <option value="in-stock">In Stock</option>
+                        <option value="low-stock">Low Stock</option>
+                        <option value="out-of-stock">Out of Stock</option>
+                    </select>
+                </div>
+                <div class="col-md-2">
+                    <button type="button" class="btn btn-outline-secondary w-100" onclick="clearFilters()">
+                        <i class="fas fa-times me-2"></i>Clear
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Products Table -->
+    <div class="card">
+        <div class="card-header bg-white">
+            <div class="row align-items-center">
+                <div class="col">
+                    <h5 class="card-title mb-0">
+                        <i class="fas fa-list me-2"></i>Product Catalog
+                    </h5>
+                </div>
+                @* <div class="col-auto">
+                    <div class="btn-group btn-group-sm">
+                        <button type="button" class="btn btn-outline-secondary active" data-view="table">
+                            <i class="fas fa-table"></i>
+                        </button>
+                        <button type="button" class="btn btn-outline-secondary" data-view="grid">
+                            <i class="fas fa-th"></i>
+                        </button>
+                    </div>
+                </div> *@
+            </div>
+        </div>
+        <div class="card-body p-0">
+            <div class="table-responsive">
+                <table class="table table-hover mb-0 data-table">
+                    <thead>
+                        <tr>
+                            <th width="60">Image</th>
+                            <th>Product</th>
+                            <th>Category</th>
+                            <th>Price</th>
+                            <th>Stock</th>
+                            <th>GST</th>
+                            <th>Added</th>
+                            <th class="text-center" width="120">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var product in Model.Items)
+                        {
+                            <tr data-category="@product.CategoryId" data-stock="@product.StockQuantity">
+                                <td>
+                                    @if (!string.IsNullOrEmpty(product.ImagePath))
+                                    {
+                                        <img src="@product.ImagePath" alt="@product.Name" 
+                                             class="rounded" style="width: 50px; height: 50px; object-fit: cover;">
+                                    }
+                                    else
+                                    {
+                                        <div class="bg-light rounded d-flex align-items-center justify-content-center" 
+                                             style="width: 50px; height: 50px;">
+                                            <i class="fas fa-image text-muted"></i>
+                                        </div>
+                                    }
+                                </td>
+                                <td>
+                                    <div>
+                                        <div class="fw-semibold">@product.Name</div>
+                                        <small class="text-muted">
+                                            @if (product.Description?.Length > 50)
+                                            {
+                                                @(product.Description.Substring(0, 50) + "...")
+                                            }
+                                            else
+                                            {
+                                                @product.Description
+                                            }
+                                        </small>
+                                    </div>
+                                </td>
+                                <td>
+                                    <span class="badge bg-light text-dark">@product.CategoryName</span>
+                                </td>
+                                <td class="fw-semibold text-success">₹@product.Price.ToString("N2")</td>
+                                <td>
+                                    <span class="badge @(product.StockQuantity > 10 ? "bg-success" : product.StockQuantity > 5 ? "bg-warning" : product.StockQuantity > 0 ? "bg-danger" : "bg-secondary")">
+                                        @product.StockQuantity
+                                        @if (product.StockQuantity == 0)
+                                        {
+                                            <i class="fas fa-exclamation-triangle ms-1"></i>
+                                        }
+                                    </span>
+                                </td>
+                                <td>@product.GST%</td>
+                                <td>
+                                    <span class="text-muted">@product.CreatedAt.ToString("MMM dd")</span>
+                                </td>
+                                <td class="text-center">
+                                    <div class="btn-group btn-group-sm" role="group">
+                                        <a href="@Url.Action("Details", new { id = product.ProductId })" 
+                                           class="btn btn-outline-info" title="View Details">
+                                            <i class="fas fa-eye"></i>
+                                        </a>
+                                        <a href="@Url.Action("Edit", new { id = product.ProductId })" 
+                                           class="btn btn-outline-primary" title="Edit">
+                                            <i class="fas fa-edit"></i>
+                                        </a>
+                                        <button type="button" class="btn btn-outline-danger" 
+                                                onclick="confirmDelete(@product.ProductId, '@product.Name')" title="Delete">
+                                            <i class="fas fa-trash"></i>
+                                        </button>
+                                    </div>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        
+        <!-- Pagination -->
+        @if (Model.TotalPages > 1)
+        {
+            <div class="card-footer bg-white">
+                <nav aria-label="Products pagination">
+                    <ul class="pagination justify-content-center mb-0">
+                        <li class="page-item @(Model.PageNumber <= 1 ? "disabled" : "")">
+                            <a class="page-link" href="@Url.Action("Index", new { page = Model.PageNumber - 1, pageSize = Model.PageSize, categoryId = ViewBag.SelectedCategoryId })">
+                                <i class="fas fa-chevron-left me-1"></i>Previous
+                            </a>
+                        </li>
+                        
+                        @for (int i = Math.Max(1, Model.PageNumber - 2); i <= Math.Min(Model.TotalPages, Model.PageNumber + 2); i++)
+                        {
+                            <li class="page-item @(i == Model.PageNumber ? "active" : "")">
+                                <a class="page-link" href="@Url.Action("Index", new { page = i, pageSize = Model.PageSize, categoryId = ViewBag.SelectedCategoryId })">@i</a>
+                            </li>
+                        }
+                        
+                        <li class="page-item @(Model.PageNumber >= Model.TotalPages ? "disabled" : "")">
+                            <a class="page-link" href="@Url.Action("Index", new { page = Model.PageNumber + 1, pageSize = Model.PageSize, categoryId = ViewBag.SelectedCategoryId })">
+                                Next<i class="fas fa-chevron-right ms-1"></i>
+                            </a>
+                        </li>
+                    </ul>
+                </nav>
+                
+                <div class="text-center text-muted mt-2">
+                    <small>Showing @((Model.PageNumber - 1) * Model.PageSize + 1) to @Math.Min(Model.PageNumber * Model.PageSize, Model.TotalCount) of @Model.TotalCount products</small>
+                </div>
+            </div>
+        }
+    </div>
+</div>
+
+<!-- Delete Confirmation Modal -->
+<div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="deleteModalLabel">
+                    <i class="fas fa-exclamation-triangle text-warning me-2"></i>Confirm Delete
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <p>Are you sure you want to delete the product <strong id="deleteProductName"></strong>?</p>
+                <p class="text-muted mb-0">This action cannot be undone and will remove all associated data.</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                <form id="deleteForm" method="post" class="d-inline">
+                    <button type="submit" class="btn btn-danger">
+                        <i class="fas fa-trash me-2"></i>Delete Product
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        function confirmDelete(productId, productName) {
+            document.getElementById('deleteProductName').textContent = productName;
+            document.getElementById('deleteForm').action = '@Url.Action("Delete")/' + productId;
+            new bootstrap.Modal(document.getElementById('deleteModal')).show();
+        }
+
+        function clearFilters() {
+            document.getElementById('searchInput').value = '';
+            document.getElementById('categoryFilter').value = '';
+            document.getElementById('stockFilter').value = '';
+            filterProducts();
+        }
+
+        function filterProducts() {
+            const searchTerm = document.getElementById('searchInput').value.toLowerCase();
+            const categoryFilter = document.getElementById('categoryFilter').value;
+            const stockFilter = document.getElementById('stockFilter').value;
+            const tableRows = document.querySelectorAll('.data-table tbody tr');
+            
+            tableRows.forEach(row => {
+                const text = row.textContent.toLowerCase();
+                const category = row.getAttribute('data-category');
+                const stock = parseInt(row.getAttribute('data-stock'));
+                
+                let showRow = true;
+                
+                // Search filter
+                if (searchTerm && !text.includes(searchTerm)) {
+                    showRow = false;
+                }
+                
+                // Category filter
+                if (categoryFilter && category !== categoryFilter) {
+                    showRow = false;
+                }
+                
+                // Stock filter
+                if (stockFilter) {
+                    if (stockFilter === 'in-stock' && stock === 0) showRow = false;
+                    if (stockFilter === 'low-stock' && (stock > 5 || stock === 0)) showRow = false;
+                    if (stockFilter === 'out-of-stock' && stock > 0) showRow = false;
+                }
+                
+                row.style.display = showRow ? '' : 'none';
+            });
+        }
+
+                function downloadTemplate() {
+            const csvContent = 'Name,Description,CategoryName,Price,StockQuantity,GST,ImageUrl\n' +
+                              'Sample Sofa,Comfortable 3-seater sofa,Furniture,25000,5,18,\n' +
+                              'LED Table Lamp,Modern LED table lamp,Lighting,2500,10,18,\n' +
+                              'Wall Art,Beautiful wall decoration,Home Décor,1500,15,18,';
+
+            const blob = new Blob([csvContent], { type: 'text/csv' });
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'product_upload_template.csv';
+            document.body.appendChild(a);
+            a.click();
+            window.URL.revokeObjectURL(url);
+            document.body.removeChild(a);
+        }
+
+        // Add event listeners
+        document.getElementById('searchInput').addEventListener('keyup', filterProducts);
+        document.getElementById('categoryFilter').addEventListener('change', filterProducts);
+        document.getElementById('stockFilter').addEventListener('change', filterProducts);
+    </script>
+}

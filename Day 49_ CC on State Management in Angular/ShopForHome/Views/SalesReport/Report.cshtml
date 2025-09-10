@@ -1,0 +1,257 @@
+﻿<!-- Views/SalesReport/Report.cshtml -->
+@model ShopForHome.ViewModels.SalesReportViewModel
+@{
+    ViewData["Title"] = "Sales Report Results";
+    Layout = "_Layout";
+}
+
+<div class="container-fluid">
+    <!-- Page Header -->
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h1 class="page-title">
+                <i class="fas fa-chart-bar me-3"></i>Sales Report
+            </h1>
+            <p class="text-muted mb-0">
+                Report for @Model.FromDate.ToString("MMM dd, yyyy") - @Model.ToDate.ToString("MMM dd, yyyy")
+                (@Model.ReportDays days)
+            </p>
+        </div>
+        <div class="btn-group">
+            <button onclick="window.print()" class="btn btn-outline-primary">
+                <i class="fas fa-print me-2"></i>Print Report
+            </button>
+            <a href="@Url.Action("Index")" class="btn btn-outline-secondary">
+                <i class="fas fa-arrow-left me-2"></i>Back to Filters
+            </a>
+        </div>
+    </div>
+
+    <!-- Summary Statistics -->
+    <div class="row g-4 mb-5">
+        <div class="col-xl-2 col-md-4 col-sm-6">
+            <div class="card stats-card primary h-100">
+                <div class="card-body text-center">
+                    <i class="fas fa-shopping-cart fa-2x text-primary mb-2"></i>
+                    <h3 class="mb-1">@Model.TotalOrders</h3>
+                    <small class="text-muted">Total Orders</small>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-xl-2 col-md-4 col-sm-6">
+            <div class="card stats-card success h-100">
+                <div class="card-body text-center">
+                    <i class="fas fa-rupee-sign fa-2x text-success mb-2"></i>
+                    <h3 class="mb-1">₹@Model.TotalRevenue.ToString("N0")</h3>
+                    <small class="text-muted">Total Revenue</small>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-xl-2 col-md-4 col-sm-6">
+            <div class="card stats-card info h-100">
+                <div class="card-body text-center">
+                    <i class="fas fa-box fa-2x text-info mb-2"></i>
+                    <h3 class="mb-1">@Model.TotalItemsSold</h3>
+                    <small class="text-muted">Items Sold</small>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-xl-2 col-md-4 col-sm-6">
+            <div class="card stats-card warning h-100">
+                <div class="card-body text-center">
+                    <i class="fas fa-chart-line fa-2x text-warning mb-2"></i>
+                    <h3 class="mb-1">₹@Model.AverageOrderValue.ToString("N0")</h3>
+                    <small class="text-muted">Avg Order Value</small>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-xl-2 col-md-4 col-sm-6">
+            <div class="card stats-card danger h-100">
+                <div class="card-body text-center">
+                    <i class="fas fa-percent fa-2x text-danger mb-2"></i>
+                    <h3 class="mb-1">₹@Model.TotalDiscount.ToString("N0")</h3>
+                    <small class="text-muted">Total Discount</small>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-xl-2 col-md-4 col-sm-6">
+            <div class="card stats-card secondary h-100">
+                <div class="card-body text-center">
+                    <i class="fas fa-calendar-day fa-2x text-secondary mb-2"></i>
+                    <h3 class="mb-1">₹@Model.DailyAverageRevenue.ToString("N0")</h3>
+                    <small class="text-muted">Daily Avg Revenue</small>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row g-4">
+        <!-- Top Products -->
+        <div class="col-lg-6">
+            <div class="card h-100">
+                <div class="card-header bg-gradient bg-primary text-white">
+                    <h5 class="card-title mb-0">
+                        <i class="fas fa-trophy me-2"></i>Top Selling Products
+                    </h5>
+                </div>
+                <div class="card-body p-0">
+                    @if (Model.TopProducts.Any())
+                    {
+                        <div class="table-responsive">
+                            <table class="table table-hover mb-0">
+                                <thead class="table-light">
+                                    <tr>
+                                        <th width="60">Rank</th>
+                                        <th>Product</th>
+                                        <th>Qty Sold</th>
+                                        <th>Revenue</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @for (int i = 0; i < Model.TopProducts.Count; i++)
+                                    {
+                                        var product = Model.TopProducts[i];
+                                        <tr>
+                                            <td>
+                                                <span class="badge @(i == 0 ? "bg-warning" : i == 1 ? "bg-secondary" : i == 2 ? "bg-danger" : "bg-light text-dark")">
+                                                    #@(i + 1)
+                                                </span>
+                                            </td>
+                                            <td>
+                                                <div class="d-flex align-items-center">
+                                                    @if (!string.IsNullOrEmpty(product.ProductImage))
+                                                    {
+                                                        <img src="@product.ProductImage" alt="@product.ProductName"
+                                                             class="rounded me-2" style="width: 32px; height: 32px; object-fit: cover;">
+                                                    }
+                                                    else
+                                                    {
+                                                        <div class="bg-light rounded me-2 d-flex align-items-center justify-content-center"
+                                                             style="width: 32px; height: 32px;">
+                                                            <i class="fas fa-image text-muted small"></i>
+                                                        </div>
+                                                    }
+                                                    <div>
+                                                        <div class="fw-semibold">@product.ProductName</div>
+                                                        <small class="text-muted">@product.OrderCount orders</small>
+                                                    </div>
+                                                </div>
+                                            </td>
+                                            <td class="fw-semibold">@product.QuantitySold</td>
+                                            <td class="fw-semibold text-success">₹@product.Revenue.ToString("N0")</td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="p-4 text-center text-muted">
+                            <i class="fas fa-chart-bar fa-3x mb-3 opacity-25"></i>
+                            <p class="mb-0">No sales data found for the selected period</p>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+
+        <!-- Category Performance -->
+        <div class="col-lg-6">
+            <div class="card h-100">
+                <div class="card-header bg-gradient bg-success text-white">
+                    <h5 class="card-title mb-0">
+                        <i class="fas fa-layer-group me-2"></i>Category Performance
+                    </h5>
+                </div>
+                <div class="card-body p-0">
+                    @if (Model.CategorySales.Any())
+                    {
+                        <div class="table-responsive">
+                            <table class="table table-hover mb-0">
+                                <thead class="table-light">
+                                    <tr>
+                                        <th>Category</th>
+                                        <th>Products</th>
+                                        <th>Qty Sold</th>
+                                        <th>Revenue</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var category in Model.CategorySales)
+                                    {
+                                        <tr>
+                                            <td class="fw-semibold">@category.CategoryName</td>
+                                            <td>@category.ProductCount</td>
+                                            <td class="fw-semibold">@category.TotalQuantitySold</td>
+                                            <td class="fw-semibold text-success">₹@category.TotalRevenue.ToString("N0")</td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="p-4 text-center text-muted">
+                            <i class="fas fa-layer-group fa-3x mb-3 opacity-25"></i>
+                            <p class="mb-0">No category data available</p>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Recent Orders -->
+    @if (Model.RecentOrders.Any())
+    {
+        <div class="row g-4 mt-4">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-header bg-gradient bg-info text-white">
+                        <h5 class="card-title mb-0">
+                            <i class="fas fa-clock me-2"></i>Recent Orders
+                        </h5>
+                    </div>
+                    <div class="card-body p-0">
+                        <div class="table-responsive">
+                            <table class="table table-hover mb-0">
+                                <thead class="table-light">
+                                    <tr>
+                                        <th>Order ID</th>
+                                        <th>Customer</th>
+                                        <th>Items</th>
+                                        <th>Total</th>
+                                        <th>Status</th>
+                                        <th>Date</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var order in Model.RecentOrders)
+                                    {
+                                        <tr>
+                                            <td class="fw-semibold">#@order.OrderId</td>
+                                            <td>@order.CustomerName</td>
+                                            <td>@order.ItemsCount items</td>
+                                            <td class="fw-semibold text-success">₹@order.GrandTotal.ToString("N2")</td>
+                                            <td>
+                                                <span class="badge @order.StatusBadgeClass">@order.Status</span>
+                                            </td>
+                                            <td class="text-muted">@order.OrderDate.ToString("MMM dd, yyyy")</td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+}

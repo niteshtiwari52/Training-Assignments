@@ -1,0 +1,78 @@
+<div class="container mt-4">
+  <h2 class="mb-4">Order History</h2>
+  
+  <div *ngIf="isLoading" class="text-center">
+    <div class="spinner-border text-purple" role="status">
+      <span class="visually-hidden">Loading...</span>
+    </div>
+    <p class="mt-2">Loading orders...</p>
+  </div>
+  
+  <div *ngIf="!isLoading && orders.length === 0" class="alert alert-info">
+    You haven't placed any orders yet. <a routerLink="/products">Start shopping</a>
+  </div>
+
+  <div *ngIf="!isLoading && orders.length > 0" class="row">
+    <div class="col-md-8">
+      <div class="card">
+        <div class="card-header bg-purple text-white">
+          <h5 class="mb-0">My Orders</h5>
+        </div>
+        <div class="card-body">
+          <div *ngFor="let order of orders" class="border-bottom pb-3 mb-3">
+            <div class="d-flex justify-content-between align-items-center">
+              <div>
+                <h6 class="mb-1">Order #{{order.orderId}}</h6>
+                <p class="text-muted mb-1">Placed on: {{order.createdAt | date:'medium'}}</p>
+                <span class="badge" [ngClass]="{
+                  'bg-success': order.status === 'Delivered',
+                  'bg-warning': order.status === 'Pending' || order.status === 'Processing',
+                  'bg-info': order.status === 'Shipped',
+                  'bg-danger': order.status === 'Cancelled'
+                }">{{order.status}}</span>
+              </div>
+              <div class="text-end">
+                <p class="mb-1 fw-bold">Total: ₹{{order.grandTotal | number:'1.2-2'}}</p>
+                <button class="btn btn-outline-purple btn-sm me-2" (click)="viewOrderDetails(order)">
+                  View Details
+                </button>
+                <button *ngIf="order.canCancel" class="btn btn-outline-danger btn-sm" (click)="cancelOrder(order.orderId)">
+                  Cancel Order
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Order Details -->
+    <div class="col-md-4" *ngIf="selectedOrder">
+      <div class="card">
+        <div class="card-header bg-light">
+          <h5 class="mb-0">Order Details #{{selectedOrder.orderId}}</h5>
+        </div>
+        <div class="card-body">
+          <p><strong>Order Date:</strong> {{selectedOrder.createdAt | date:'medium'}}</p>
+          <p><strong>Status:</strong> {{selectedOrder.status}}</p>
+          <p><strong>Total Amount:</strong> ₹{{selectedOrder.totalAmount | number:'1.2-2'}}</p>
+          <p><strong>Discount:</strong> ₹{{selectedOrder.discountAmount | number:'1.2-2'}}</p>
+          <p><strong>GST:</strong> ₹{{selectedOrder.gst | number:'1.2-2'}}</p>
+          <p><strong>Grand Total:</strong> ₹{{selectedOrder.grandTotal | number:'1.2-2'}}</p>
+          
+          <h6 class="mt-3">Items ({{selectedOrder.totalItems}}):</h6>
+          <div *ngFor="let item of selectedOrder.orderItems" class="border-bottom pb-2 mb-2">
+            <div class="d-flex align-items-center">
+              <img [src]="getImageUrl(item.productImage)" [alt]="item.productName" class="me-2" style="width: 50px; height: 50px; object-fit: cover;">
+              <div>
+                <p class="mb-1">{{item.productName}} (x{{item.quantity}})</p>
+                <p class="text-muted mb-0">₹{{item.priceAtPurchase}} each</p>
+                <p class="text-muted mb-0">Total: ₹{{item.totalPrice}}</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

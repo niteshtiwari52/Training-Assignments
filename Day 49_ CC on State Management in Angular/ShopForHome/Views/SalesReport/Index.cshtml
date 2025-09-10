@@ -1,0 +1,177 @@
+﻿<!-- Views/SalesReport/Index.cshtml -->
+@model ShopForHome.ViewModels.SalesReportRequestViewModel
+@{
+    ViewData["Title"] = "Sales Report";
+    Layout = "_Layout";
+}
+
+<div class="container-fluid">
+    <!-- Page Header -->
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h1 class="page-title">
+                <i class="fas fa-chart-bar me-3"></i>Sales Report
+            </h1>
+            <p class="text-muted mb-0">Generate detailed sales reports for any date range</p>
+        </div>
+    </div>
+
+    <!-- Report Filter Form -->
+    <div class="card">
+        <div class="card-header bg-primary text-white">
+            <h5 class="card-title mb-0">
+                <i class="fas fa-filter me-2"></i>Report Parameters
+            </h5>
+        </div>
+        <div class="card-body">
+            <form asp-action="GenerateReport" method="post">
+                <div asp-validation-summary="ModelOnly" class="alert alert-danger" role="alert">
+                    <i class="fas fa-exclamation-triangle me-2"></i>Please correct the errors below.
+                </div>
+
+                <div class="row g-3">
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label asp-for="FromDate" class="form-label">
+                                <i class="fas fa-calendar-alt me-2"></i>From Date
+                            </label>
+                            <input asp-for="FromDate" class="form-control" type="date" />
+                            <span asp-validation-for="FromDate" class="text-danger small"></span>
+                        </div>
+                    </div>
+
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label asp-for="ToDate" class="form-label">
+                                <i class="fas fa-calendar-alt me-2"></i>To Date
+                            </label>
+                            <input asp-for="ToDate" class="form-control" type="date" />
+                            <span asp-validation-for="ToDate" class="text-danger small"></span>
+                        </div>
+                    </div>
+
+                    @* <div class="col-md-4">
+                        <div class="form-group">
+                            <label asp-for="CategoryId" class="form-label">
+                                <i class="fas fa-folder me-2"></i>Category Filter (Optional)
+                            </label>
+                            <select asp-for="CategoryId" class="form-select">
+                                <option value="">All Categories</option>
+                                @foreach (var category in ViewBag.Categories ?? new List<ShopForHome.Models.Category>())
+                                {
+                                    <option value="@category.CategoryId">@category.Name</option>
+                                }
+                            </select>
+                        </div>
+                    </div> *@
+                </div>
+
+                <div class="row mt-4">
+                    <div class="col-12">
+                        <div class="d-flex gap-2">
+                            <button type="submit" class="btn btn-primary">
+                                <i class="fas fa-chart-line me-2"></i>Generate Report
+                            </button>
+                            <button type="button" class="btn btn-outline-secondary" onclick="setQuickDateRange('today')">Today</button>
+                            <button type="button" class="btn btn-outline-secondary" onclick="setQuickDateRange('week')">This Week</button>
+                            <button type="button" class="btn btn-outline-secondary" onclick="setQuickDateRange('month')">This Month</button>
+                            <button type="button" class="btn btn-outline-secondary" onclick="setQuickDateRange('year')">This Year</button>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Quick Stats Cards -->
+    @* <div class="row g-4 mt-4">
+        <div class="col-lg-3 col-md-6">
+            <div class="card stats-card primary">
+                <div class="card-body text-center">
+                    <i class="fas fa-shopping-cart fa-2x text-primary mb-2"></i>
+                    <h4 class="mb-1" id="quickTotalOrders">-</h4>
+                    <small class="text-muted">Total Orders (Last 30 Days)</small>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-3 col-md-6">
+            <div class="card stats-card success">
+                <div class="card-body text-center">
+                    <i class="fas fa-rupee-sign fa-2x text-success mb-2"></i>
+                    <h4 class="mb-1" id="quickTotalRevenue">-</h4>
+                    <small class="text-muted">Total Revenue (Last 30 Days)</small>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-3 col-md-6">
+            <div class="card stats-card info">
+                <div class="card-body text-center">
+                    <i class="fas fa-box fa-2x text-info mb-2"></i>
+                    <h4 class="mb-1" id="quickItemsSold">-</h4>
+                    <small class="text-muted">Items Sold (Last 30 Days)</small>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-3 col-md-6">
+            <div class="card stats-card warning">
+                <div class="card-body text-center">
+                    <i class="fas fa-chart-line fa-2x text-warning mb-2"></i>
+                    <h4 class="mb-1" id="quickAvgOrder">-</h4>
+                    <small class="text-muted">Avg Order Value (Last 30 Days)</small>
+                </div>
+            </div>
+        </div>
+    </div> *@
+</div>
+
+@section Scripts {
+    <script>
+        function setQuickDateRange(period) {
+            const fromInput = document.getElementById('FromDate');
+            const toInput = document.getElementById('ToDate');
+            const today = new Date();
+
+            let fromDate = new Date();
+            let toDate = new Date();
+
+            switch(period) {
+                case 'today':
+                    fromDate = today;
+                    break;
+                case 'week':
+                    fromDate = new Date(today.getTime() - (today.getDay() * 24 * 60 * 60 * 1000));
+                    break;
+                case 'month':
+                    fromDate = new Date(today.getFullYear(), today.getMonth(), 1);
+                    break;
+                case 'year':
+                    fromDate = new Date(today.getFullYear(), 0, 1);
+                    break;
+            }
+
+            fromInput.value = fromDate.toISOString().split('T')[0];
+            toInput.value = toDate.toISOString().split('T')[0];
+        }
+
+        // Load quick stats on page load
+        // document.addEventListener('DOMContentLoaded', function() {
+        //     loadQuickStats();
+        // });
+
+        // async function loadQuickStats() {
+        //     try {
+        //         This would typically call an API endpoint for quick stats
+        //         For now, we'll show placeholder text
+        //         document.getElementById('quickTotalOrders').textContent = 'Loading...';
+        //         document.getElementById('quickTotalRevenue').textContent = 'Loading...';
+        //         document.getElementById('quickItemsSold').textContent = 'Loading...';
+        //         document.getElementById('quickAvgOrder').textContent = 'Loading...';
+        //     } catch (error) {
+        //         console.error('Error loading quick stats:', error);
+        //     }
+        // }
+    </script>
+}

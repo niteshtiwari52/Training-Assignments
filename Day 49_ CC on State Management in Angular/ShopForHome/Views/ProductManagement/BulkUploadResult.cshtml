@@ -1,0 +1,250 @@
+﻿<!-- Views/ProductManagement/BulkUploadResult.cshtml -->
+@model ShopForHome.ViewModels.BulkUploadResultViewModel
+@{
+    ViewData["Title"] = "Bulk Upload Results";
+    Layout = "_Layout";
+}
+
+<div class="container-fluid">
+    <!-- Page Header -->
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h1 class="page-title">
+                <i class="fas fa-chart-pie me-3"></i>Bulk Upload Results
+            </h1>
+            <p class="text-muted mb-0">@Model.Summary</p>
+        </div>
+        <div>
+            <a href="@Url.Action("BulkUpload")" class="btn btn-outline-primary me-2">
+                <i class="fas fa-upload me-2"></i>Upload Another File
+            </a>
+            <a href="@Url.Action("Index")" class="btn btn-primary">
+                <i class="fas fa-list me-2"></i>View Products
+            </a>
+        </div>
+    </div>
+
+    <!-- Summary Cards -->
+    <div class="row g-4 mb-4">
+        <div class="col-md-3">
+            <div class="card stats-card primary h-100">
+                <div class="card-body text-center">
+                    <i class="fas fa-file-csv fa-2x text-primary mb-2"></i>
+                    <h3 class="mb-1">@Model.TotalRows</h3>
+                    <small class="text-muted">Total Rows</small>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-3">
+            <div class="card stats-card success h-100">
+                <div class="card-body text-center">
+                    <i class="fas fa-check-circle fa-2x text-success mb-2"></i>
+                    <h3 class="mb-1">@Model.SuccessfulRows</h3>
+                    <small class="text-muted">Successfully Added</small>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-3">
+            <div class="card stats-card danger h-100">
+                <div class="card-body text-center">
+                    <i class="fas fa-exclamation-circle fa-2x text-danger mb-2"></i>
+                    <h3 class="mb-1">@Model.ErrorRows</h3>
+                    <small class="text-muted">Errors</small>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-3">
+            <div class="card stats-card warning h-100">
+                <div class="card-body text-center">
+                    <i class="fas fa-exclamation-triangle fa-2x text-warning mb-2"></i>
+                    <h3 class="mb-1">@Model.Warnings.Count</h3>
+                    <small class="text-muted">Warnings</small>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Success/Error Status -->
+    <div class="row g-4">
+        <div class="col-12">
+            @if (Model.SuccessfulRows > 0 && !Model.HasErrors)
+            {
+                <div class="alert alert-success" role="alert">
+                    <i class="fas fa-check-circle fa-2x me-3"></i>
+                    <div>
+                        <h4 class="alert-heading mb-2">Upload Completed Successfully!</h4>
+                        <p class="mb-0">All @Model.SuccessfulRows products have been added to your catalog.</p>
+                    </div>
+                </div>
+            }
+            else if (Model.SuccessfulRows > 0 && Model.HasErrors)
+            {
+                <div class="alert alert-warning" role="alert">
+                    <i class="fas fa-exclamation-triangle fa-2x me-3"></i>
+                    <div>
+                        <h4 class="alert-heading mb-2">Partially Completed</h4>
+                        <p class="mb-0">@Model.SuccessfulRows products were added successfully, but @Model.ErrorRows rows had errors.</p>
+                    </div>
+                </div>
+            }
+            else if (Model.HasErrors)
+            {
+                <div class="alert alert-danger" role="alert">
+                    <i class="fas fa-times-circle fa-2x me-3"></i>
+                    <div>
+                        <h4 class="alert-heading mb-2">Upload Failed</h4>
+                        <p class="mb-0">No products were added due to errors in the CSV file.</p>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+
+    <!-- Progress Bar -->
+    <div class="row g-4 mt-2">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-center mb-2">
+                        <span class="fw-semibold">Processing Progress</span>
+                        <span class="badge bg-primary">@((Model.SuccessfulRows * 100 / Math.Max(Model.TotalRows, 1)).ToString("N1"))% Success Rate</span>
+                    </div>
+                    <div class="progress mb-2" style="height: 8px;">
+                        <div class="progress-bar bg-success" role="progressbar"
+                             style="width: @((Model.SuccessfulRows * 100.0 / Math.Max(Model.TotalRows, 1)).ToString("N1"))%"></div>
+                        <div class="progress-bar bg-danger" role="progressbar"
+                             style="width: @((Model.ErrorRows * 100.0 / Math.Max(Model.TotalRows, 1)).ToString("N1"))%"></div>
+                    </div>
+                    <div class="row text-center">
+                        <div class="col">
+                            <small class="text-success">
+                                <i class="fas fa-check me-1"></i>@Model.SuccessfulRows Success
+                            </small>
+                        </div>
+                        <div class="col">
+                            <small class="text-danger">
+                                <i class="fas fa-times me-1"></i>@Model.ErrorRows Errors
+                            </small>
+                        </div>
+                        <div class="col">
+                            <small class="text-warning">
+                                <i class="fas fa-exclamation me-1"></i>@Model.Warnings.Count Warnings
+                            </small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Error Details -->
+    @if (Model.HasErrors)
+    {
+        <div class="row g-4 mt-2">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-header bg-danger text-white">
+                        <h5 class="card-title mb-0">
+                            <i class="fas fa-exclamation-circle me-2"></i>Errors (@Model.ErrorRows)
+                        </h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="list-group list-group-flush">
+                            @foreach (var error in Model.Errors)
+                            {
+                                <div class="list-group-item border-0 px-0">
+                                    <i class="fas fa-times-circle text-danger me-2"></i>@error
+                                </div>
+                            }
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+
+    <!-- Warning Details -->
+    @if (Model.HasWarnings)
+    {
+        <div class="row g-4 mt-2">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-header bg-warning text-dark">
+                        <h5 class="card-title mb-0">
+                            <i class="fas fa-exclamation-triangle me-2"></i>Warnings (@Model.Warnings.Count)
+                        </h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="list-group list-group-flush">
+                            @foreach (var warning in Model.Warnings)
+                            {
+                                <div class="list-group-item border-0 px-0">
+                                    <i class="fas fa-exclamation-triangle text-warning me-2"></i>@warning
+                                </div>
+                            }
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+
+    <!-- Next Steps -->
+    <div class="row g-4 mt-2">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header bg-info text-white">
+                    <h6 class="card-title mb-0">
+                        <i class="fas fa-lightbulb me-2"></i>Next Steps
+                    </h6>
+                </div>
+                <div class="card-body">
+                    <div class="row g-3">
+                        <div class="col-md-6">
+                            <div class="d-flex align-items-center">
+                                <i class="fas fa-eye text-primary fa-2x me-3"></i>
+                                <div>
+                                    <h6 class="mb-1">Review Products</h6>
+                                    <small class="text-muted">Check the uploaded products in the product list</small>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="d-flex align-items-center">
+                                <i class="fas fa-upload text-success fa-2x me-3"></i>
+                                <div>
+                                    <h6 class="mb-1">Upload More</h6>
+                                    <small class="text-muted">Upload additional products if needed</small>
+                                </div>
+                            </div>
+                        </div>
+                        @if (Model.HasErrors)
+                        {
+                            <div class="col-md-6">
+                                <div class="d-flex align-items-center">
+                                    <i class="fas fa-edit text-warning fa-2x me-3"></i>
+                                    <div>
+                                        <h6 class="mb-1">Fix Errors</h6>
+                                        <small class="text-muted">Correct the errors in your CSV and try again</small>
+                                    </div>
+                                </div>
+                            </div>
+                        }
+                        <div class="col-md-6">
+                            <div class="d-flex align-items-center">
+                                <i class="fas fa-images text-info fa-2x me-3"></i>
+                                <div>
+                                    <h6 class="mb-1">Add Images</h6>
+                                    <small class="text-muted">Upload product images individually if needed</small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
