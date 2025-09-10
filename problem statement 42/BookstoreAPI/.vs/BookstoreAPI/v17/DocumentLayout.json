@@ -1,0 +1,169 @@
+{
+  "Version": 1,
+  "WorkspaceRootPath": "D:\\Nitesh Workspace\\WIPRO-TRAINING\\training-assignments\\problem statement 42\\BookstoreAPI\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{39C1E479-88FA-4997-8B34-FBC4E14EDB86}|BookstoreAPI.csproj|d:\\nitesh workspace\\wipro-training\\training-assignments\\problem statement 42\\bookstoreapi\\controllers\\bookscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{39C1E479-88FA-4997-8B34-FBC4E14EDB86}|BookstoreAPI.csproj|solutionrelative:controllers\\bookscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{39C1E479-88FA-4997-8B34-FBC4E14EDB86}|BookstoreAPI.csproj|d:\\nitesh workspace\\wipro-training\\training-assignments\\problem statement 42\\bookstoreapi\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{39C1E479-88FA-4997-8B34-FBC4E14EDB86}|BookstoreAPI.csproj|solutionrelative:program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{39C1E479-88FA-4997-8B34-FBC4E14EDB86}|BookstoreAPI.csproj|d:\\nitesh workspace\\wipro-training\\training-assignments\\problem statement 42\\bookstoreapi\\controllers\\authorscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{39C1E479-88FA-4997-8B34-FBC4E14EDB86}|BookstoreAPI.csproj|solutionrelative:controllers\\authorscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{39C1E479-88FA-4997-8B34-FBC4E14EDB86}|BookstoreAPI.csproj|d:\\nitesh workspace\\wipro-training\\training-assignments\\problem statement 42\\bookstoreapi\\data\\bookstorecontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{39C1E479-88FA-4997-8B34-FBC4E14EDB86}|BookstoreAPI.csproj|solutionrelative:data\\bookstorecontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{39C1E479-88FA-4997-8B34-FBC4E14EDB86}|BookstoreAPI.csproj|d:\\nitesh workspace\\wipro-training\\training-assignments\\problem statement 42\\bookstoreapi\\dtos\\authordto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{39C1E479-88FA-4997-8B34-FBC4E14EDB86}|BookstoreAPI.csproj|solutionrelative:dtos\\authordto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{39C1E479-88FA-4997-8B34-FBC4E14EDB86}|BookstoreAPI.csproj|d:\\nitesh workspace\\wipro-training\\training-assignments\\problem statement 42\\bookstoreapi\\dtos\\bookdto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{39C1E479-88FA-4997-8B34-FBC4E14EDB86}|BookstoreAPI.csproj|solutionrelative:dtos\\bookdto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{39C1E479-88FA-4997-8B34-FBC4E14EDB86}|BookstoreAPI.csproj|d:\\nitesh workspace\\wipro-training\\training-assignments\\problem statement 42\\bookstoreapi\\bookstoreapi.csproj||{FA3CD31E-987B-443A-9B81-186104E8DAC1}|",
+      "RelativeMoniker": "D:0:0:{39C1E479-88FA-4997-8B34-FBC4E14EDB86}|BookstoreAPI.csproj|solutionrelative:bookstoreapi.csproj||{FA3CD31E-987B-443A-9B81-186104E8DAC1}|"
+    }
+  ],
+  "DocumentGroupContainers": [
+    {
+      "Orientation": 0,
+      "VerticalTabListWidth": 256,
+      "DocumentGroups": [
+        {
+          "DockedWidth": 200,
+          "SelectedChildIndex": 9,
+          "Children": [
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{3ae79031-e1bc-11d0-8f78-00a0c9110057}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{aa2115a1-9712-457b-9047-dbb71ca2cdd2}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{1c4feeaa-4718-4aa9-859d-94ce25d182ba}"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "BookstoreContext.cs",
+              "DocumentMoniker": "D:\\Nitesh Workspace\\WIPRO-TRAINING\\training-assignments\\problem statement 42\\BookstoreAPI\\Data\\BookstoreContext.cs",
+              "RelativeDocumentMoniker": "Data\\BookstoreContext.cs",
+              "ToolTip": "D:\\Nitesh Workspace\\WIPRO-TRAINING\\training-assignments\\problem statement 42\\BookstoreAPI\\Data\\BookstoreContext.cs",
+              "RelativeToolTip": "Data\\BookstoreContext.cs",
+              "ViewState": "AgIAABkAAAAAAAAAAAAwwCUAAAAFAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-09-10T12:58:59.605Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "AuthorDto.cs",
+              "DocumentMoniker": "D:\\Nitesh Workspace\\WIPRO-TRAINING\\training-assignments\\problem statement 42\\BookstoreAPI\\DTOs\\AuthorDto.cs",
+              "RelativeDocumentMoniker": "DTOs\\AuthorDto.cs",
+              "ToolTip": "D:\\Nitesh Workspace\\WIPRO-TRAINING\\training-assignments\\problem statement 42\\BookstoreAPI\\DTOs\\AuthorDto.cs",
+              "RelativeToolTip": "DTOs\\AuthorDto.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAkAAAAFAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-09-10T12:58:40.25Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 5,
+              "Title": "BookDto.cs",
+              "DocumentMoniker": "D:\\Nitesh Workspace\\WIPRO-TRAINING\\training-assignments\\problem statement 42\\BookstoreAPI\\DTOs\\BookDto.cs",
+              "RelativeDocumentMoniker": "DTOs\\BookDto.cs",
+              "ToolTip": "D:\\Nitesh Workspace\\WIPRO-TRAINING\\training-assignments\\problem statement 42\\BookstoreAPI\\DTOs\\BookDto.cs",
+              "RelativeToolTip": "DTOs\\BookDto.cs",
+              "ViewState": "AgIAAA4AAAAAAAAAAAAAwCMAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-09-10T12:50:06.831Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 6,
+              "Title": "BookstoreAPI",
+              "DocumentMoniker": "D:\\Nitesh Workspace\\WIPRO-TRAINING\\training-assignments\\problem statement 42\\BookstoreAPI\\BookstoreAPI.csproj",
+              "RelativeDocumentMoniker": "BookstoreAPI.csproj",
+              "ToolTip": "D:\\Nitesh Workspace\\WIPRO-TRAINING\\training-assignments\\problem statement 42\\BookstoreAPI\\BookstoreAPI.csproj",
+              "RelativeToolTip": "BookstoreAPI.csproj",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000758|",
+              "WhenOpened": "2025-09-10T12:47:33.908Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "Program.cs",
+              "DocumentMoniker": "D:\\Nitesh Workspace\\WIPRO-TRAINING\\training-assignments\\problem statement 42\\BookstoreAPI\\Program.cs",
+              "RelativeDocumentMoniker": "Program.cs",
+              "ToolTip": "D:\\Nitesh Workspace\\WIPRO-TRAINING\\training-assignments\\problem statement 42\\BookstoreAPI\\Program.cs",
+              "RelativeToolTip": "Program.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAB0AAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-09-10T12:44:02.97Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "AuthorsController.cs",
+              "DocumentMoniker": "D:\\Nitesh Workspace\\WIPRO-TRAINING\\training-assignments\\problem statement 42\\BookstoreAPI\\Controllers\\AuthorsController.cs",
+              "RelativeDocumentMoniker": "Controllers\\AuthorsController.cs",
+              "ToolTip": "D:\\Nitesh Workspace\\WIPRO-TRAINING\\training-assignments\\problem statement 42\\BookstoreAPI\\Controllers\\AuthorsController.cs",
+              "RelativeToolTip": "Controllers\\AuthorsController.cs",
+              "ViewState": "AgIAACYAAAAAAAAAAAAQwC8AAAANAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-09-10T12:43:16.326Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "BooksController.cs",
+              "DocumentMoniker": "D:\\Nitesh Workspace\\WIPRO-TRAINING\\training-assignments\\problem statement 42\\BookstoreAPI\\Controllers\\BooksController.cs",
+              "RelativeDocumentMoniker": "Controllers\\BooksController.cs",
+              "ToolTip": "D:\\Nitesh Workspace\\WIPRO-TRAINING\\training-assignments\\problem statement 42\\BookstoreAPI\\Controllers\\BooksController.cs",
+              "RelativeToolTip": "Controllers\\BooksController.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAQAAAACAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-09-10T12:42:41.678Z",
+              "EditorCaption": ""
+            }
+          ]
+        },
+        {
+          "DockedWidth": 200,
+          "SelectedChildIndex": -1,
+          "Children": [
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{0ad07096-bba9-4900-a651-0598d26f6d24}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{d78612c7-9962-4b83-95d9-268046dad23a}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{34e76e81-ee4a-11d0-ae2e-00a0c90fffc3}"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
