@@ -1,0 +1,42 @@
+<div class="container">
+  <h1>Notification Component Demo</h1>
+  
+  <!-- Demo buttons to test different notification types -->
+  <div class="demo-buttons">
+    <button (click)="showSuccess()">Show Success</button>
+    <button (click)="showError()">Show Error</button>
+    <button (click)="showWarning()">Show Warning</button>
+    <button (click)="showInfo()">Show Info</button>
+  </div>
+
+  <!-- Notification components -->
+  <app-notification
+    *ngIf="showSuccessNotification"
+    [message]="'Data saved successfully!'"
+    [type]="'success'"
+    (closed)="onNotificationClosed('success')"
+  ></app-notification>
+
+  <app-notification
+    *ngIf="showErrorNotification"
+    [message]="'An error occurred while saving data!'"
+    [type]="'error'"
+    [autoDismiss]="false"
+    (closed)="onNotificationClosed('error')"
+  ></app-notification>
+
+  <app-notification
+    *ngIf="showWarningNotification"
+    [message]="'Please check your input data!'"
+    [type]="'warning'"
+    [dismissTime]="5000"
+    (closed)="onNotificationClosed('warning')"
+  ></app-notification>
+
+  <app-notification
+    *ngIf="showInfoNotification"
+    [message]="'Here is some helpful information for you.'"
+    [type]="'info'"
+    (closed)="onNotificationClosed('info')"
+  ></app-notification>
+</div>
