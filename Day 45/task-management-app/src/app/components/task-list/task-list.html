@@ -1,0 +1,59 @@
+<div class="task-list-container">
+  <h2>Task List</h2>
+  
+  <!-- Loading State -->
+  <div *ngIf="loading" class="loading">
+    <p>Loading tasks...</p>
+  </div>
+
+  <!-- Error State -->
+  <div *ngIf="error" class="error-message">
+    <p>{{ error }}</p>
+    <button (click)="loadTasks()" class="retry-btn">Retry</button>
+  </div>
+
+  <!-- Empty State -->
+  <div *ngIf="!loading && !error && tasks.length === 0" class="empty-state">
+    <p>No tasks found. Add your first task above!</p>
+  </div>
+
+  <!-- Task Table -->
+  <div *ngIf="!loading && !error && tasks.length > 0" class="task-table-container">
+    <table class="task-table">
+      <thead>
+        <tr>
+          <th>Title</th>
+          <th>Description</th>
+          <th>Status</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let task of tasks" [class.completed]="task.status === 'completed'">
+          <td class="task-title">{{ task.title }}</td>
+          <td class="task-description">{{ task.description }}</td>
+          <td>
+            <span class="status-badge" [class]="task.status">
+              {{ task.status }}
+            </span>
+          </td>
+          <td class="actions">
+            <button 
+              (click)="toggleTaskStatus(task)" 
+              class="toggle-btn"
+              [class.complete]="task.status === 'pending'"
+              [class.undo]="task.status === 'completed'">
+              {{ task.status === 'pending' ? 'Complete' : 'Undo' }}
+            </button>
+            <button 
+              (click)="deleteTask(task.id!)" 
+              class="delete-btn"
+              title="Delete Task">
+              Delete
+            </button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>

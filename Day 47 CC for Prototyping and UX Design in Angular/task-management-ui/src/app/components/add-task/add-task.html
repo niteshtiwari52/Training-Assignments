@@ -1,0 +1,27 @@
+<mat-card>
+  <mat-card-header>
+    <mat-card-title>Add New Task</mat-card-title>
+  </mat-card-header>
+  
+  <mat-card-content>
+    <form (ngSubmit)="onSubmit()">
+      <mat-form-field appearance="fill" class="full-width">
+        <mat-label>Task Title</mat-label>
+        <input 
+          matInput 
+          [(ngModel)]="taskTitle" 
+          name="taskTitle" 
+          required
+          placeholder="Enter task title">
+      </mat-form-field>
+      
+      <button 
+        mat-raised-button 
+        color="primary" 
+        type="submit"
+        [disabled]="!taskTitle">
+        Add Task
+      </button>
+    </form>
+  </mat-card-content>
+</mat-card>

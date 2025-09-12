@@ -1,0 +1,85 @@
+<div class="task-form-container">
+  <h2>Add New Task</h2>
+  
+  <!-- Success Message -->
+  <div *ngIf="success" class="success-message">
+    <p>{{ success }}</p>
+  </div>
+
+  <!-- Error Message -->
+  <div *ngIf="error" class="error-message">
+    <p>{{ error }}</p>
+  </div>
+
+  <form [formGroup]="taskForm" (ngSubmit)="onSubmit()" class="task-form">
+    <!-- Title Field -->
+    <div class="form-group">
+      <label for="title">Task Title *</label>
+      <input
+        type="text"
+        id="title"
+        formControlName="title"
+        placeholder="Enter task title..."
+        class="form-control"
+        [class.error]="hasError('title', 'required') || hasError('title', 'minlength') || hasError('title', 'maxlength')"
+      />
+      <div class="error-text" *ngIf="getErrorMessage('title')">
+        {{ getErrorMessage('title') }}
+      </div>
+      <div class="field-info">
+        <small>{{ title?.value?.length || 0 }}/100 characters</small>
+      </div>
+    </div>
+
+    <!-- Description Field -->
+    <div class="form-group">
+      <label for="description">Description *</label>
+      <textarea
+        id="description"
+        formControlName="description"
+        placeholder="Enter task description..."
+        rows="4"
+        class="form-control"
+        [class.error]="hasError('description', 'required') || hasError('description', 'minlength') || hasError('description', 'maxlength')"
+      ></textarea>
+      <div class="error-text" *ngIf="getErrorMessage('description')">
+        {{ getErrorMessage('description') }}
+      </div>
+      <div class="field-info">
+        <small>{{ description?.value?.length || 0 }}/500 characters</small>
+      </div>
+    </div>
+
+    <!-- Form Actions -->
+    <div class="form-actions">
+      <button
+        type="submit"
+        class="submit-btn"
+        [disabled]="taskForm.invalid || isSubmitting"
+        [class.loading]="isSubmitting"
+      >
+        <span *ngIf="!isSubmitting">Add Task</span>
+        <span *ngIf="isSubmitting">Adding...</span>
+      </button>
+      
+      <button
+        type="button"
+        class="reset-btn"
+        (click)="onReset()"
+        [disabled]="isSubmitting"
+      >
+        Reset
+      </button>
+    </div>
+
+    <!-- Form Status Info -->
+    <div class="form-status" *ngIf="taskForm.dirty">
+      <small *ngIf="taskForm.valid" class="valid-status">
+        ✓ Form is ready to submit
+      </small>
+      <small *ngIf="taskForm.invalid" class="invalid-status">
+        Please fill in all required fields correctly
+      </small>
+    </div>
+  </form>
+</div>

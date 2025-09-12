@@ -1,0 +1,35 @@
+<!-- src/app/app.component.html -->
+<div class="app-container">
+  <!-- Header -->
+  <header class="app-header">
+    <div class="container">
+      <h1 class="app-title">
+        <span class="title-icon">📋</span>
+        {{ title }}
+      </h1>
+      <p class="app-subtitle">Organize your tasks efficiently</p>
+    </div>
+  </header>
+
+  <!-- Main Content -->
+  <main class="app-main">
+    <div class="container">
+      <!-- Task Form Section -->
+      <section class="form-section">
+        <app-task-form (taskAdded)="onTaskAdded()"></app-task-form>
+      </section>
+
+      <!-- Task List Section -->
+      <section class="list-section">
+        <app-task-list (taskDeleted)="onTaskDeleted()"></app-task-list>
+      </section>
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <footer class="app-footer">
+    <div class="container">
+      <p>&copy; 2024 Task Management App. Built with Angular.</p>
+    </div>
+  </footer>
+</div>

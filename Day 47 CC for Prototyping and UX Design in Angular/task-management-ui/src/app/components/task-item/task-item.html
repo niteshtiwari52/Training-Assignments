@@ -1,0 +1,8 @@
+<mat-list-item>
+  <mat-checkbox 
+    [checked]="task.completed" 
+    (change)="onToggle()"
+    color="primary">
+    <span [class.completed]="task.completed">{{ task.title }}</span>
+  </mat-checkbox>
+</mat-list-item>

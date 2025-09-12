@@ -1,0 +1,21 @@
+<mat-card>
+  <mat-card-header>
+    <mat-card-title>Task List</mat-card-title>
+    <button mat-raised-button color="primary" (click)="onCompleteAll()">
+      Complete All
+    </button>
+  </mat-card-header>
+  
+  <mat-card-content>
+    <mat-list *ngIf="tasks.length > 0; else noTasks">
+      <app-task-item 
+        *ngFor="let task of tasks" 
+        [task]="task">
+      </app-task-item>
+    </mat-list>
+    
+    <ng-template #noTasks>
+      <p>No tasks available. Add a new task or check your connection.</p>
+    </ng-template>
+  </mat-card-content>
+</mat-card>
