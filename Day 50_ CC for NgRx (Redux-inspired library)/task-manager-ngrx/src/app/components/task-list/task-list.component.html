@@ -1,0 +1,137 @@
+<div class="task-list-container">
+  <!-- Header -->
+  <div class="task-list-header">
+    <h2>Task Manager</h2>
+
+    <!-- Stats -->
+    <div class="task-stats">
+      <div class="stat-item">
+        <span class="stat-value">{{ tasksCount$ | async }}</span>
+        <span class="stat-label">Total</span>
+      </div>
+      <div class="stat-item">
+        <span class="stat-value">{{ pendingTasksCount$ | async }}</span>
+        <span class="stat-label">Pending</span>
+      </div>
+      <div class="stat-item">
+        <span class="stat-value">{{ completedTasksCount$ | async }}</span>
+        <span class="stat-label">Completed</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Filter Tabs -->
+  <div class="filter-tabs">
+    <button 
+      class="filter-tab"
+      [class.active]="viewMode === 'all'"
+      (click)="setViewMode('all')"
+    >
+      All Tasks
+    </button>
+    <button 
+      class="filter-tab"
+      [class.active]="viewMode === 'pending'"
+      (click)="setViewMode('pending')"
+    >
+      Pending
+    </button>
+    <button 
+      class="filter-tab"
+      [class.active]="viewMode === 'completed'"
+      (click)="setViewMode('completed')"
+    >
+      Completed
+    </button>
+  </div>
+
+  <!-- Loading State -->
+  <div class="loading-container" *ngIf="loading$ | async">
+    <div class="loading-spinner"></div>
+    <p>Loading tasks...</p>
+  </div>
+
+  <!-- Error State -->
+  <div class="error-container" *ngIf="error$ | async as error">
+    <div class="error-icon">⚠️</div>
+    <p>{{ error }}</p>
+    <button class="btn btn-secondary" (click)="onClearAllTasks()">
+      Clear All Tasks
+    </button>
+  </div>
+
+  <!-- Task List -->
+  <div class="task-list" *ngIf="!(loading$ | async) && !(error$ | async)">
+    <!-- Empty State -->
+    <div 
+      class="empty-state" 
+      *ngIf="(getTasksToDisplay() | async)?.length === 0"
+    >
+      <div class="empty-icon">📝</div>
+      <h3>No tasks found</h3>
+      <p *ngIf="viewMode === 'all'">Start by adding your first task above!</p>
+      <p *ngIf="viewMode === 'pending'">No pending tasks. Great job!</p>
+      <p *ngIf="viewMode === 'completed'">No completed tasks yet.</p>
+    </div>
+
+    <!-- Task Items -->
+    <div 
+      class="task-item"
+      *ngFor="let task of getTasksToDisplay() | async; trackBy: trackByTaskId"
+      [class.completed]="task.completed"
+    >
+      <!-- Task Content -->
+      <div class="task-content">
+        <div class="task-main">
+          <h4 class="task-title" [class.completed]="task.completed">
+            {{ task.title }}
+          </h4>
+          <p class="task-description" [class.completed]="task.completed">
+            {{ task.description }}
+          </p>
+        </div>
+
+        <div class="task-meta">
+          <span class="task-date">
+            Created: {{ formatDate(task.createdAt) }}
+          </span>
+          <span class="task-date" *ngIf="task.updatedAt && task.updatedAt !== task.createdAt">
+            Updated: {{ formatDate(task.updatedAt) }}
+          </span>
+        </div>
+      </div>
+
+      <!-- Task Actions -->
+      <div class="task-actions">
+        <button 
+          class="action-btn complete-btn"
+          [class.completed]="task.completed"
+          (click)="onToggleTaskStatus(task.id, task.completed)"
+          [title]="task.completed ? 'Mark as Pending' : 'Mark as Completed'"
+        >
+          <span class="action-icon">{{ task.completed ? '↺' : '✓' }}</span>
+          {{ task.completed ? 'Undo' : 'Complete' }}
+        </button>
+
+        <button 
+          class="action-btn delete-btn"
+          (click)="onDeleteTask(task.id)"
+          title="Delete Task"
+        >
+          <span class="action-icon">🗑️</span>
+          Delete
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Clear All Button -->
+  <div class="clear-all-container" *ngIf="(tasksCount$ | async)! > 0 && !(loading$ | async)">
+    <button 
+      class="btn btn-danger clear-all-btn"
+      (click)="onClearAllTasks()"
+    >
+      Clear All Tasks
+    </button>
+  </div>
+</div>
